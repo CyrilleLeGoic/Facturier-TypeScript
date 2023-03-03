@@ -4,6 +4,7 @@ import { Datas } from "./Datas.js";
 import { Display } from "./Display.js";
 import { HasPrint } from "../interfaces/HasPrint.js";
 import { Print } from "./Print.js";
+import { bind } from "../decorators/Bind.js";
 
 export class FormInput {
     form : HTMLFormElement;
@@ -57,7 +58,7 @@ export class FormInput {
 
     // Listeners
     private submitFormListener(): void {
-        this.form.addEventListener('submit', this.handleFormSubmit.bind(this));
+        this.form.addEventListener('submit', this.handleFormSubmit);
       }
       
     private printListener(btn : HTMLButtonElement, docContainer : HTMLDivElement): void {
@@ -76,11 +77,12 @@ export class FormInput {
     }
 
     private getStoredDocsListener(): void {
-        this.btnStoredInvoices.addEventListener("click", this.getItems.bind(this, 'invoice') )
-        this.btnStoredEstimates.addEventListener("click", this.getItems.bind(this, 'estimate') )
+        this.btnStoredInvoices.addEventListener("click", ()=> this.getItems('invoice') )
+        this.btnStoredEstimates.addEventListener("click", ()=> this.getItems('estimate') )
        
         }   
 
+    @bind
     private getItems(docType : string){
         if(this.storedElement.hasChildNodes()){
             this.storedElement.innerHTML = "";
@@ -121,7 +123,9 @@ export class FormInput {
      
 
     // Methods
+    @bind
     private handleFormSubmit(e : Event): void {
+        
         e.preventDefault();
         const inputs = this.inputDatas();
 
